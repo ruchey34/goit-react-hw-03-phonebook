@@ -3,6 +3,7 @@ import { ContactsForm } from './Contacts/Contacts';
 import { Filter } from './Filter/Filter';
 import Form from './Form';
 import s from './App.module.css';
+import { nanoid } from 'nanoid';
 
 // export const App = () => {
 export class App extends Component {
@@ -32,21 +33,13 @@ export class App extends Component {
     }
   }
 
-  handleSubmit = object => {
-    const { contacts } = this.state;
-    this.setState({ contacts: [...contacts, object] });
-
-    const checkContact = contacts.find(
-      contact => contact.name.toLowerCase() === object.name.toLowerCase()
-    );
-    console.log(checkContact);
-    if (checkContact) {
-      alert(`${object.name} is already in contacts `);
+  handleSubmit = ({ name, number }) => {
+    const contact = { id: nanoid(), name, number };
+    if (this.state.contacts.some(e => e.name === name)) {
+      return alert(`${name} is already in contacts!`);
     }
 
-    // this.setState(prevState => ({
-    //   contacts: [this.contact, ...prevState.contacts],
-    // }));
+    this.setState(({ contacts }) => ({ contacts: [contact, ...contacts] }));
   };
 
   handleDelete = id => {
